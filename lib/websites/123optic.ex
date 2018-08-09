@@ -33,9 +33,12 @@ defmodule Crawler.Websites.OneTwoThreeOptic do
             %{name: product_name} = Crawler.Helper.name(Meeseeks.text(name))
 
             # Package amount
-            package_amount = case Regex.named_captures(~r/(?<amount>[\d]+) lenses/i, Meeseeks.text(lens_amount)) do
-                %{"amount" => package_amount} -> String.to_integer(package_amount)
-                _ -> nil
+            package_amount = case lens_amount do
+                nil -> nil
+                lens_amount -> case Regex.named_captures(~r/(?<amount>[\d]+) lenses/i, Meeseeks.text(lens_amount)) do
+                                    %{"amount" => package_amount} -> String.to_integer(package_amount)
+                                    _ -> nil
+                                end
             end
 
             # Price

@@ -45,9 +45,9 @@ defmodule Crawler.Helper do
         name = Regex.replace(~r/contact lens(es|)/i, name, "")
         name = Regex.replace(~r/(contacts|Linser|lins|Piilolinssit)$/i, name, "")
         name = Regex.replace(~r/\[(Daily|Weekly|Monthly) contacts\]/i, name, "")
-        name = Regex.replace(~r/(Tageslinsen|Tageslinse|Tages|Monatskontak)/i, name, "")
+        name = Regex.replace(~r/(Tageslinsen|Tageslinse|Tages|Monatskontak|Monatslinsen)/i, name, "")
         name = Regex.replace(~r/(Daily|Weekly|Monthly|1-2 Week) (contacts)( Acuvue|)/i, name, "")
-        name = Regex.replace(~r/(CIBA Vision|CooperVision|Cooper Vision|Bausch & Lomb)/i, name, "")
+        name = Regex.replace(~r/(CIBA Vision|CooperVision|Cooper Vision|Bausch & Lomb|Johnson&Johnson|Bausch&Lomb|MPG&E|Johnson & Johnson|Alcon)/i, name, "")
         name = Regex.replace(~r/Sparpaket( für|) (\d+) (Monate|M)/i, name, "")
         name = Regex.replace(~r/\-(\d+)%/i, name, "")
         name = String.replace(name, ~r/ +/, " ")
@@ -67,6 +67,7 @@ defmodule Crawler.Helper do
         name = String.replace(name, ~r/\+ free/i, "")
         name = String.replace(name, ~r/new/i, "")
         name = String.replace(name, ~r/starter set/i, "")
+        name = String.replace(name, ~r/1Day/i, "1 Day")
         
         # Clean up more
         name = String.replace(name, ~r/\'/, "")
@@ -83,6 +84,8 @@ defmodule Crawler.Helper do
     end
 
     def parse_money(amount) do
+        amount = String.replace(amount, "€", "EUR")
+
         amount_new = Regex.run(~r/-?[0-9]{1,300}(,[0-9]{3})*(\.[0-9]+)?/, amount)
         |> List.first
         |> String.replace(~r/\,/, "")
