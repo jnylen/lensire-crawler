@@ -1,8 +1,9 @@
-##
-## Base file for websites
-##
-
 defmodule Crawler.Website do
+
+    @moduledoc """
+        Runs a parser for a website and exports it into a json file
+    """
+
     def execute(website) do
         website_module = case website do
             "123optic" -> "OneTwoThreeOptic"

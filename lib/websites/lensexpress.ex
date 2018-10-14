@@ -1,6 +1,9 @@
-# Importer for Lensexpress.ee
 defmodule Crawler.Websites.Lensexpress do
     import Meeseeks.CSS
+
+    @moduledoc """
+        Parses lensexpress.ee and turns it into a struct
+    """
 
     def execute do
         urls_to_fetch = urls()

@@ -1,7 +1,10 @@
-# Importer for 1a-sehen.de
 defmodule Crawler.Websites.Oneasehen do
     import Meeseeks.CSS
     import Meeseeks.XPath
+
+    @moduledoc """
+        Parsing HTML from 1a-sehen.de and turns the data into Crawler struct
+    """
 
     def execute do
         urls_to_fetch = urls()

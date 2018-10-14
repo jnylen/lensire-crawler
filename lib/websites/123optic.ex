@@ -1,6 +1,9 @@
-# Importer for 123optic.com type of websites
 defmodule Crawler.Websites.OneTwoThreeOptic do
     import Meeseeks.CSS
+
+    @moduledoc """
+        Parses 123optic.com turns it into structs.
+    """
 
     def execute do
         urls_to_fetch = urls()

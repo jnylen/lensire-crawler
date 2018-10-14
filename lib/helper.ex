@@ -1,4 +1,14 @@
 defmodule Crawler.Helper do
+
+    @moduledoc """
+        Helper for parsing names of contact lenses.
+
+        ## Example:
+
+            iex> Crawler.Helper.name("1 Day Acuvue TruEye 30 tageslinsen")
+            %{amount: 30, boxes: nil, name: "1 Day Acuvue TruEye"}
+    """
+
     # Pretty up the name
     def name(name) do
         add_pack_amounts = case Regex.named_captures(~r/\+ (?<amount>[\d]+)( pack| tageslinsen| pk|pk|-pack|\/box| linser|er-box|er|stk| stk| stück|pcs| pcs| lenses|pc| pc)(s|)/i, name) do
@@ -40,47 +50,43 @@ defmodule Crawler.Helper do
 
     def name_only(name) do
         # Clean up name
-        name = Regex.replace(~r/(\d+)( |)x( |)(\d+) (Stück|stk\.)/i, name, "")
-        name = Regex.replace(~r/([\d]+)( pack| tageslinsen| pk|-box|box|-pack|-boxes| boxes|pk|\/box| linser|er pack|er-box|er|stk| stk| stück|pcs| pcs| lenses|pc| pc)(s|)/i, name, "")
-        name = Regex.replace(~r/contact lens(es|)/i, name, "")
-        name = Regex.replace(~r/(contacts|Linser|lins|Piilolinssit)$/i, name, "")
-        name = Regex.replace(~r/\[(Daily|Weekly|Monthly) contacts\]/i, name, "")
-        name = Regex.replace(~r/(Tageslinsen|Tageslinse|Tages|Monatskontak|Monatslinsen)/i, name, "")
-        name = Regex.replace(~r/(Daily|Weekly|Monthly|1-2 Week) (contacts)( Acuvue|)/i, name, "")
-        name = Regex.replace(~r/(CIBA Vision|CooperVision|Cooper Vision|Bausch & Lomb|Johnson&Johnson|Bausch&Lomb|MPG&E|Johnson & Johnson|Alcon)/i, name, "")
-        name = Regex.replace(~r/Sparpaket( für|) (\d+) (Monate|M)/i, name, "")
-        name = Regex.replace(~r/\-(\d+)%/i, name, "")
-        name = String.replace(name, ~r/ +/, " ")
-        name = String.trim(name)
-        name = String.replace(name, ~r/(Kontaktlinsen von \/ Alcon|Kontaktlinsen von Johnson & Johnson)/i, "")
-        name = String.replace(name, ~r/Kontaktlinsen, von \/ Alcon$/i, "")
-        name = String.trim(name)
-        name = String.replace(name, ~r/(Lentilles de contact| mit Stärke|Kontaktlinsen)/i, "")
-        name = String.replace(name, ~r/ (realisation|kampanj)$/i, "")
-        name = String.replace(name, ~r/\[\]/, "")
-        name = String.replace(name, ~r/\(\)/, "")
-        name = String.replace(name, ~r/ Box$/i, "")
-        name = String.replace(name, ~r/ -$/, "")
-        name = String.replace(name, ~r/,$/, "")
-        name = String.replace(name, ~r/\!$/, "")
-        name = String.replace(name, ~r/(Daily|Weekly|Monthly|Montly|1-2 Week)$/i, "")
-        name = String.replace(name, ~r/\+ free/i, "")
-        name = String.replace(name, ~r/new/i, "")
-        name = String.replace(name, ~r/starter set/i, "")
-        name = String.replace(name, ~r/1Day/i, "1 Day")
-        
-        # Clean up more
-        name = String.replace(name, ~r/\'/, "")
-        name = String.replace(name, ~r/\"/, "")
-        name = String.replace(name, ~r/\)/, "")
-        name = String.replace(name, ~r/\(/, "")
-        name = String.replace(name, ~r/ +/, " ")
-        name = String.replace(name, ~r/, -/, " -")
-        name = String.replace(name, ~r/&amp;/, "&")
-
-        name = String.trim(name)
-
         name
+        |> String.replace(~r/(\d+)( |)x( |)(\d+) (Stück|stk\.)/i, "")
+        |> String.replace(~r/([\d]+)( pack| tageslinsen| pk|-box|box|-pack|-boxes| boxes|pk|\/box| linser|er pack|er-box|er|stk| stk| stück|pcs| pcs| lenses|pc| pc)(s|)/i, "")
+        |> String.replace(~r/contact lens(es|)/i, "")
+        |> String.replace(~r/(contacts|Linser|lins|Piilolinssit)$/i, "")
+        |> String.replace(~r/\[(Daily|Weekly|Monthly) contacts\]/i, "")
+        |> String.replace(~r/(Tageslinsen|Tageslinse|Tages|Monatskontak|Monatslinsen)/i, "")
+        |> String.replace(~r/(Daily|Weekly|Monthly|1-2 Week) (contacts)( Acuvue|)/i, "")
+        |> String.replace(~r/(CIBA Vision|CooperVision|Cooper Vision|Bausch & Lomb|Johnson&Johnson|Bausch&Lomb|MPG&E|Johnson & Johnson|Alcon)/i, "")
+        |> String.replace(~r/Sparpaket( für|) (\d+) (Monate|M)/i, "")
+        |> String.replace(~r/\-(\d+)%/i, "")
+        |> String.replace(~r/ +/, " ")
+        |> String.trim
+        |> String.replace(~r/(Kontaktlinsen von \/ Alcon|Kontaktlinsen von Johnson & Johnson)/i, "")
+        |> String.replace(~r/Kontaktlinsen, von \/ Alcon$/i, "")
+        |> String.trim
+        |> String.replace(~r/(Lentilles de contact| mit Stärke|Kontaktlinsen)/i, "")
+        |> String.replace(~r/ (realisation|kampanj)$/i, "")
+        |> String.replace(~r/\[\]/, "")
+        |> String.replace(~r/\(\)/, "")
+        |> String.replace(~r/ Box$/i, "")
+        |> String.replace(~r/ -$/, "")
+        |> String.replace(~r/,$/, "")
+        |> String.replace(~r/\!$/, "")
+        |> String.replace(~r/(Daily|Weekly|Monthly|Montly|1-2 Week)$/i, "")
+        |> String.replace(~r/\+ free/i, "")
+        |> String.replace(~r/new/i, "")
+        |> String.replace(~r/starter set/i, "")
+        |> String.replace(~r/1Day/i, "1 Day")
+        |> String.replace(~r/\'/, "")
+        |> String.replace(~r/\"/, "")
+        |> String.replace(~r/\)/, "")
+        |> String.replace(~r/\(/, "")
+        |> String.replace(~r/ +/, " ")
+        |> String.replace(~r/, -/, " -")
+        |> String.replace(~r/&amp;/, "&")
+        |> String.trim
     end
 
     def parse_money(amount) do
