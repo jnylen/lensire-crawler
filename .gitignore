@@ -23,4 +23,4 @@ erl_crash.dump
 crawler-*.tar
 
 .elixir_ls
-websites
+websites/*.json
