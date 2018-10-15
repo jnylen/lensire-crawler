@@ -5,6 +5,10 @@ defmodule Crawler.Websites.Lensexpress do
         Parses lensexpress.ee and turns it into a struct
     """
 
+    @doc """
+        `execute` is the function that will execute an amount of functions of returned
+        data.
+    """
     def execute do
         urls_to_fetch = urls()
         items = Enum.map(urls_to_fetch, fn(url) ->
@@ -16,7 +20,9 @@ defmodule Crawler.Websites.Lensexpress do
         List.flatten(items)
     end
 
-    # URLS to fetch
+    @doc """
+        `urls` is an array of links to fetch and parse data from.
+    """
     def urls() do
         [
             "https://www.lensexpress.ee/laatsed/1-paevased.html", # Dailies
@@ -31,7 +37,10 @@ defmodule Crawler.Websites.Lensexpress do
         ]
     end
 
-    # HTML Parser
+    @doc """
+        `parse_html` is an function that parses the HTML retrieved from `execute` and turns
+        it into one struct per contact lens.
+    """
     def parse_html({:ok, %Tesla.Env{body: body}}) do
         for product <- Meeseeks.all(body, css("ol#products-list li")) do
             name = Meeseeks.one(product, css("h5.product-name a"))
