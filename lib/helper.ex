@@ -1,15 +1,19 @@
 defmodule Crawler.Helper do
 
     @moduledoc """
-        Helper for parsing names of contact lenses.
+        `Helper` is a library for different functions for parsing a contact lens item from
+        various sources
+    """
+
+    @doc """
+        `name` parses an name for package_amount, special types etc and sends it to `name_only`
+        to be converted to a normal match-friendly name.
 
         ## Example:
 
             iex> Crawler.Helper.name("1 Day Acuvue TruEye 30 tageslinsen")
             %{amount: 30, boxes: nil, name: "1 Day Acuvue TruEye"}
     """
-
-    # Pretty up the name
     def name(name) do
         add_pack_amounts = case Regex.named_captures(~r/\+ (?<amount>[\d]+)( pack| tageslinsen| pk|pk|-pack|\/box| linser|er-box|er|stk| stk| stück|pcs| pcs| lenses|pc| pc)(s|)/i, name) do
             %{"amount" => amount} -> String.to_integer(amount)
@@ -48,6 +52,15 @@ defmodule Crawler.Helper do
         %{name: name, amount: pack_amount, boxes: boxes}
     end
 
+    @doc """
+        `name_only` cleans a name up from various things such as brand names etc so its gets turned into a name
+        that can be easily matched towards the product database.
+
+        ## Example:
+
+            iex> Crawler.Helper.name_only("1 Day Acuvue TruEye 30 tageslinsen")
+            "1 Day Acuvue TruEye"
+    """
     def name_only(name) do
         # Clean up name
         name
@@ -89,6 +102,13 @@ defmodule Crawler.Helper do
         |> String.trim
     end
 
+    @doc """
+        `parse_amount` parses a string of an price into the correct way we are doing it.
+
+        ## Examples
+            iex> Crawler.Helper.parse_money("10.00 EUR")
+            %{amount: 10.0, currency: "EUR"}
+    """
     def parse_money(amount) do
         amount = String.replace(amount, "€", "EUR")
 

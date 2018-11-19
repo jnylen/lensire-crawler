@@ -5,6 +5,10 @@ defmodule Crawler.Websites.OneTwoThreeOptic do
         Parses 123optic.com turns it into structs.
     """
 
+    @doc """
+        `execute` is the function that will execute an amount of functions of returned
+        data.
+    """
     def execute do
         urls_to_fetch = urls()
         items = Enum.map(urls_to_fetch, fn(url) ->
@@ -16,7 +20,9 @@ defmodule Crawler.Websites.OneTwoThreeOptic do
         List.flatten(items)
     end
 
-    # URLS to fetch
+    @doc """
+        `urls` is an array of links to fetch and parse data from.
+    """
     def urls() do
         [
             "https://www.123optic.com/eu-en/daily-lenses/",
@@ -25,7 +31,10 @@ defmodule Crawler.Websites.OneTwoThreeOptic do
         ]
     end
 
-    # HTML Parser
+    @doc """
+        `parse_html` is an function that parses the HTML retrieved from `execute` and turns
+        it into one struct per contact lens.
+    """
     def parse_html({:ok, %Tesla.Env{body: body}}) do
         for product <- Meeseeks.all(body, css("ul.products li.column")) do
             name = Meeseeks.one(product, css("h2.product__title a"))
