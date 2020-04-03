@@ -24,7 +24,7 @@ defmodule Crawler.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.3.2", only: [:dev, :test], runtime: false},
       {:exvcr, "~> 0.10", only: :test},
 
       {:meeseeks, "~> 0.10.0"}, # HTML Parser
