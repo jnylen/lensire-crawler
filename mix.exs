@@ -27,7 +27,7 @@ defmodule Crawler.MixProject do
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
       {:exvcr, "~> 0.10", only: :test},
 
-      {:meeseeks, "~> 0.10.0"}, # HTML Parser
+      {:meeseeks, "~> 0.15.0"}, # HTML Parser
       {:tesla, "~> 1.1"}, # HTTP Client
       {:jason, "~> 1.1"}
     ]
